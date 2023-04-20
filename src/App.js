@@ -1,19 +1,21 @@
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import './App.css';
-import Navbar from './components/Navbar';
-import Home from './pages/Home';
-import Shorten from './pages/Shorten';
-import Redirect from './components/Redirect';
+import React from "react";
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import Header from "./components/Header";
+import Home from "./components/Home";
+import Shorten from "./components/Shorten";
+import Navbar from "./components/Navbar";
+import Redirect from "./components/Redirect";
 
 function App() {
   return (
     <Router>
       <div className="App">
+        <Header />
         <Navbar />
         <Switch>
-          <Route exact path="/" component={Home} />
-          <Route exact path="/shorten" component={Shorten} />
-          <Route exact path="/:id" component={Redirect} />
+          <Route path="/" exact component={Home} />
+          <Route path="/shorten" component={Shorten} />
+          <Route path="/:id" component={Redirect} />
         </Switch>
       </div>
     </Router>
