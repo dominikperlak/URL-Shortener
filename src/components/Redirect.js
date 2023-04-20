@@ -1,25 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { getLongUrl } from "../utils/urlUtils";
+import React from 'react';
+import { firebase } from '../firebase/firebaseUtils';
+import { useParams } from 'react-router-dom';
+const Redirect = () => {
+  let { shortUrl } = useParams();
 
-const Redirect = ({ shortUrl }) => {
-  const [longUrl, setLongUrl] = useState(null);
+  firebase
+    .firestore()
+    .collection('urls')
+    .where('shortUrl', '==', shortUrl)
+    .get()
+    .then(querySnapshot => {
+      querySnapshot.forEach(doc => {
+        window.location = doc.data().url;
+      });
+    })
+    .catch(error => {
+      console.error('Error getting document: ', error);
+    });
 
-  useEffect(() => {
-    const fetchLongUrl = async () => {
-      const urlData = await getLongUrl(shortUrl);
-      setLongUrl(urlData?.url || "/");
-      window.location.replace(urlData?.url || "/");
-    };
-
-    fetchLongUrl();
-  }, [shortUrl]);
-
-  return (
-    <div>
-      <h2>Redirecting...</h2>
-      {longUrl && <p>Redirecting to: {longUrl}</p>}
-    </div>
-  );
+  return <div>Redirecting...</div>;
 };
 
 export default Redirect;

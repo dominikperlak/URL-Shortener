@@ -1,13 +1,27 @@
-export const getFirebaseConfig = () => {
-    return {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_AUTH_DOMAIN",
-      databaseURL: "YOUR_DATABASE_URL",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_STORAGE_BUCKET",
-      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-      appId: "YOUR_APP_ID",
-      measurementId: "YOUR_MEASUREMENT_ID",
-    };
-  };
-  
+import { getDatabase, ref, set, get } from 'firebase/database';
+
+const db = getDatabase();
+
+export const writeToFirebase = async (urlCode, urlInput) => {
+  try {
+    await set(ref(db, `urls/${urlCode}`), {
+      url: urlInput,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const readFromFirebase = async (urlCode) => {
+  try {
+    const snapshot = await get(ref(db, `urls/${urlCode}`));
+    if (snapshot.exists()) {
+      const url = snapshot.val().url;
+      return url;
+    } else {
+      console.log("URL doesn't exist");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
