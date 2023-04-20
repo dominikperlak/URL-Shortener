@@ -1,12 +1,14 @@
-import React from 'react';
+import React from "react";
 
-function Shorten() {
+const Shorten = () => {
   return (
-    <div>
-      <h1>Shorten</h1>
-      <p>Shorten your long URLs here!</p>
+    <div className="shorten">
+      <p>
+        <span>shrtco.de/</span>examplelink
+      </p>
+      <button>Copy</button>
     </div>
   );
-}
+};
 
 export default Shorten;

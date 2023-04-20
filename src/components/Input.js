@@ -1,19 +1,20 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
 
-const Input = ({ label, value, onChange }) => {
+function Input({ type, placeholder, value, onChange, disabled }) {
   return (
-    <div className="input">
-      <label>{label}</label>
-      <input type="text" value={value} onChange={onChange} />
-    </div>
+    <form onSubmit={(e) => e.preventDefault()}>
+      <input
+        type={type}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        disabled={disabled}
+      />
+      <button type="submit" disabled={disabled}>
+        Shorten
+      </button>
+    </form>
   );
-};
-
-Input.propTypes = {
-  label: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-};
+}
 
 export default Input;

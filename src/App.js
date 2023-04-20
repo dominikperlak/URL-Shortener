@@ -1,25 +1,23 @@
-import React from "react";
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Header from "./components/Header";
-import Home from "./components/Home";
-import Shorten from "./components/Shorten";
-import Navbar from "./components/Navbar";
-import Redirect from "./components/Redirect";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Header from './components/Header';
+import Home from './components/Home';
+import Shorten from './components/Shorten';
+import Redirect from './components/Redirect';
+import './App.css';
 
-function App() {
+const App = () => {
   return (
-    <Router>
+    <BrowserRouter>
       <div className="App">
         <Header />
-        <Navbar />
-        <Switch>
-          <Route path="/" exact component={Home} />
-          <Route path="/shorten" component={Shorten} />
-          <Route path="/:id" component={Redirect} />
-        </Switch>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/shorten" element={<Shorten />} />
+          <Route path="/:id" element={<Redirect />} />
+        </Routes>
       </div>
-    </Router>
+    </BrowserRouter>
   );
-}
+};
 
 export default App;

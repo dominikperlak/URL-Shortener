@@ -1,15 +1,7 @@
-import React from "react";
+import React from 'react';
 
-const Loading = () => {
-  return (
-    <div className="loading">
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-  );
-};
+function Loading() {
+  return <div className="loading">Loading...</div>;
+}
 
 export default Loading;

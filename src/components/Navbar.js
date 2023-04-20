@@ -1,40 +1,29 @@
-import { Link } from 'react-router-dom';
+import React from "react";
+import { NavLink } from "react-router-dom";
 
-function Navbar() {
+const Navbar = () => {
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <div className="container-fluid">
-        <Link className="navbar-brand" to="/">
-          URL Shortener
-        </Link>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav">
-            <li className="nav-item">
-              <Link className="nav-link" to="/">
-                Home
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/shorten">
-                Shorten URL
-              </Link>
-            </li>
-          </ul>
-        </div>
-      </div>
+    <nav>
+      <div className="logo">Shortly</div>
+      <ul>
+        <li>
+          <NavLink exact to="/" activeClassName="active">
+            Home
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/about" activeClassName="active">
+            About
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/contact" activeClassName="active">
+            Contact
+          </NavLink>
+        </li>
+      </ul>
     </nav>
   );
-}
+};
 
 export default Navbar;
