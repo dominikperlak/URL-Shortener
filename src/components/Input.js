@@ -1,39 +1,53 @@
 import React, { useState } from 'react';
-import { isValidUrl } from './utils/urlUtils';
-import { addUrlToFirebase } from './utils/firebaseUtils';
+import { saveUrlToFirebase } from '../utils/firebaseUtils';
+import { validateUrl } from '../utils/urlUtils';
+import './Input.css';
 
-const Input = () => {
-  const [url, setUrl] = useState('');
+function Input() {
+  const [longUrl, setLongUrl] = useState('');
   const [shortUrl, setShortUrl] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (isValidUrl(url)) {
-      const newUrl = await addUrlToFirebase(url);
-      setShortUrl(`http://localhost:3000/r/${newUrl}`);
-      setUrl('');
+  const handleInputChange = (event) => {
+    setLongUrl(event.target.value);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (validateUrl(longUrl)) {
+      const urlData = await saveUrlToFirebase(longUrl, shortUrl);
+      setShortUrl(urlData.shortUrl);
+      setErrorMessage('');
+    } else {
+      setErrorMessage('Invalid URL');
     }
   };
 
   return (
-    <div>
+    <div className="input-container">
       <form onSubmit={handleSubmit}>
         <input
           type="text"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-          placeholder="Enter your long URL"
-          required
+          value={longUrl}
+          onChange={handleInputChange}
+          placeholder="Paste your long URL here"
+          className="input-field"
         />
-        <button type="submit">Shorten</button>
+        <input
+          type="text"
+          value={shortUrl}
+          onChange={(event) => setShortUrl(event.target.value)}
+          placeholder="Custom alias (optional)"
+          className="input-field"
+        />
+        <button type="submit" className="submit-button">
+          Shorten URL
+        </button>
       </form>
-      {shortUrl && (
-        <p>
-          Short URL: <a href={shortUrl}>{shortUrl}</a>
-        </p>
-      )}
+      <div className="error-message">{errorMessage}</div>
     </div>
   );
-};
+}
 
 export default Input;
