@@ -1,16 +1,22 @@
-import { useState } from 'react';
-import './App.css';
-import Input from './components/Input';
-import Redirect from './components/Redirect';
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Input from "./components/Input";
+import Redirect from "./components/Redirect";
+import "./App.css";
 
-const App = () => {
-  const [urlCode, setUrlCode] = useState(null);
-
+function App() {
   return (
-    <div className="App">
-      <h1>URL Shortener</h1>
-      {urlCode ? <Redirect urlCode={urlCode} /> : <Input setUrlCode={setUrlCode} />}
-    </div>
+    <Router>
+      <div className="App">
+        <Switch>
+          <Route path="/" exact>
+            <Input />
+          </Route>
+          <Route path="/:id">
+            <Redirect />
+          </Route>
+        </Switch>
+      </div>
+    </Router>
   );
 }
 

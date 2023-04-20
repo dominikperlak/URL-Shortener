@@ -1,27 +1,27 @@
-import { getDatabase, ref, set, get } from 'firebase/database';
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+import 'firebase/functions';
 
-const db = getDatabase();
-
-export const writeToFirebase = async (urlCode, urlInput) => {
-  try {
-    await set(ref(db, `urls/${urlCode}`), {
-      url: urlInput,
-    });
-  } catch (error) {
-    console.log(error);
-  }
+const firebaseConfig = {
+  // Your Firebase config here
 };
 
-export const readFromFirebase = async (urlCode) => {
-  try {
-    const snapshot = await get(ref(db, `urls/${urlCode}`));
-    if (snapshot.exists()) {
-      const url = snapshot.val().url;
-      return url;
-    } else {
-      console.log("URL doesn't exist");
-    }
-  } catch (error) {
-    console.log(error);
+firebase.initializeApp(firebaseConfig);
+
+const firestore = firebase.firestore();
+const functions = firebase.functions();
+
+export const shortenUrl = async (longUrl) => {
+  const response = await functions.httpsCallable('shortenUrl')({ longUrl });
+  return response.data.shortId;
+};
+
+export const getLongUrl = async (shortId) => {
+  const urlRef = await firestore.collection('urls').doc(shortId).get();
+  if (urlRef.exists) {
+    return urlRef.data().longUrl;
+  } else {
+    console.log('URL not found');
+    return null;
   }
 };
