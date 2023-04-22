@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Form, Button, Input as AntInput, Row, Col, message } from 'antd';
+import { Form, Button, Input as AntInput, Row, Col } from 'antd';
 import { FaRegCopy } from 'react-icons/fa';
 import { shortenUrl } from './bitlyurlapi';
 import '../antd.css';
+import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 
 const { Search } = AntInput;
 
@@ -13,25 +15,29 @@ const Input = ({ onShorten }) => {
 
   const handleSubmit = async (e) => {
     if (e && e.preventDefault) {
-      e.preventDefault();
+      e.preventDefault(); // dodajemy sprawdzenie, czy e istnieje i posiada metodę preventDefault
+    }
+    if (!url) {
+      toast.error('There is no command written here!');
+      return;
     }
     setIsLoading(true);
     try {
       const res = await shortenUrl(url);
       const shortUrl = res;
       setShortenedUrl(shortUrl);
-      onShorten(shortUrl);
+      onShorten(shortUrl); // przekazanie skróconego URL do App.js
       setIsLoading(false);
     } catch (error) {
       console.log(error);
       setIsLoading(false);
-      message.error('There was an error shortening the URL');
+      toast.error('There was an error shortening the URL');
     }
   };
 
   const handleCopy = () => {
     navigator.clipboard.writeText(shortenedUrl);
-    message.success('Copied to clipboard');
+    toast.success('Copied to clipboard');
   };
 
   return (
