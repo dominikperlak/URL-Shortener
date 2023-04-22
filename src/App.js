@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
 import Input from "./components/Input";
-import { shortenUrl } from './components/bitlyurlapi';
+import { shortenUrl } from "./components/bitlyurlapi";
 
 function App() {
   const [shortenedUrl, setShortenedUrl] = useState("");

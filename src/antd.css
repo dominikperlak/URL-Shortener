@@ -1,17 +1,54 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700');
+
+/* base styles */
+html {
+  font-size: 62.5%;
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1.6rem;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600;
+  margin: 0;
+}
+
+a {
+  color: #1890ff;
+}
+
+/* form styles */
+.ant-form-item-control {
+  line-height: 1.5;
+}
+
 .result-container {
-    margin-top: 1rem;
-    display: flex;
-    align-items: center;
-  }
-  
-  .result-container a {
-    flex: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  
-  .copy-button {
-    margin-left: 1rem;
-  }
-  
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+}
+
+.result-container a {
+  flex: 1;
+}
+
+.result-container button {
+  margin-left: 1rem;
+}

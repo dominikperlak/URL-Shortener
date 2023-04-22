@@ -1,17 +1,18 @@
-.result-container {
-    margin-top: 1rem;
+.my-3 {
+    margin-top: 3rem;
+  }
+  
+  .result-container {
+    margin-top: 2rem;
     display: flex;
     align-items: center;
   }
   
   .result-container a {
     flex: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
   
-  .copy-button {
+  .result-container button {
     margin-left: 1rem;
   }
   

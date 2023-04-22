@@ -13,14 +13,14 @@ const Input = ({ onShorten }) => {
 
   const handleSubmit = async (e) => {
     if (e && e.preventDefault) {
-      e.preventDefault(); // dodajemy sprawdzenie, czy e istnieje i posiada metodę preventDefault
+      e.preventDefault();
     }
     setIsLoading(true);
     try {
       const res = await shortenUrl(url);
       const shortUrl = res;
       setShortenedUrl(shortUrl);
-      onShorten(shortUrl); // przekazanie skróconego URL do App.js
+      onShorten(shortUrl);
       setIsLoading(false);
     } catch (error) {
       console.log(error);
