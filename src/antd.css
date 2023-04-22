@@ -1,0 +1,17 @@
+.result-container {
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+  }
+  
+  .result-container a {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .copy-button {
+    margin-left: 1rem;
+  }
+  
