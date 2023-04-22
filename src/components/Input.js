@@ -1,30 +1,63 @@
-import React, { useState } from 'react';
-
-const Input = ({ onShorten }) => {
+import { useState } from 'react';
+import { shortenUrl } from '../components/tinyurlapi';
+const Input = () => {
   const [url, setUrl] = useState('');
+  const [shortenedUrl, setShortenedUrl] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setIsLoading(true);
     try {
-      const shortenedUrl = await onShorten(url);
-      console.log('Shortened URL:', shortenedUrl);
-      setUrl('');
+      const result = await shortenUrl(url);
+      setShortenedUrl(result);
+      setError('');
     } catch (error) {
-      console.error(error);
-      alert(error.message);
+      setError('Something went wrong, please try again.');
     }
+    setIsLoading(false);
+  };
+
+  const handleChange = (event) => {
+    setUrl(event.target.value);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        placeholder="Enter URL"
-        value={url}
-        onChange={(event) => setUrl(event.target.value)}
-      />
-      <button type="submit">Shorten</button>
-    </form>
+    <div className="container">
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="url">Enter a URL to shorten:</label>
+        <div className="input-group mb-3">
+          <input
+            type="url"
+            className="form-control"
+            id="url"
+            aria-describedby="button-addon2"
+            placeholder="https://example.com"
+            value={url}
+            onChange={handleChange}
+            required
+          />
+          <button
+            className="btn btn-primary"
+            type="submit"
+            id="button-addon2"
+            disabled={isLoading}
+          >
+            {isLoading ? 'Loading...' : 'Shorten'}
+          </button>
+        </div>
+        {error && <div className="alert alert-danger">{error}</div>}
+        {shortenedUrl && (
+          <div className="alert alert-success">
+            Your shortened URL is:{' '}
+            <a href={shortenedUrl} target="_blank" rel="noreferrer">
+              {shortenedUrl}
+            </a>
+          </div>
+        )}
+      </form>
+    </div>
   );
 };
 

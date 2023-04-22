@@ -7,7 +7,7 @@ const shortenUrl = async (url) => {
       'Authorization': `Bearer ${TOKEN}`,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({url})
+    body: JSON.stringify({url: url})
   });
   const data = await response.json();
   if (data?.ok) {
