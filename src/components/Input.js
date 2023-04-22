@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { shortenUrl } from '../components/tinyurlapi';
-const Input = () => {
+
+const Input = ({ onUrlShorten, shortenedUrl }) => {
   const [url, setUrl] = useState('');
-  const [shortenedUrl, setShortenedUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -11,7 +11,7 @@ const Input = () => {
     setIsLoading(true);
     try {
       const result = await shortenUrl(url);
-      setShortenedUrl(result);
+      onUrlShorten(result);
       setError('');
     } catch (error) {
       setError('Something went wrong, please try again.');
@@ -42,7 +42,7 @@ const Input = () => {
             className="btn btn-primary"
             type="submit"
             id="button-addon2"
-            disabled={isLoading}
+            disabled={isLoading || url === ''}
           >
             {isLoading ? 'Loading...' : 'Shorten'}
           </button>
