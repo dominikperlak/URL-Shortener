@@ -1,30 +1,31 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 
-const Input = ({ onSubmit }) => {
-  const [url, setUrl] = useState('');
+const Input = ({ handleSubmit }) => {
+  const [inputValue, setInputValue] = useState('');
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    onSubmit(url);
-    setUrl('');
+    try {
+      await handleSubmit(inputValue);
+      setError('');
+    } catch (err) {
+      setError('Something went wrong, please try again.');
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleFormSubmit}>
       <input
-        type='text'
-        placeholder='Enter URL here...'
-        value={url}
-        onChange={(e) => setUrl(e.target.value)}
+        type="text"
+        placeholder="Enter URL"
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
       />
-      <button type='submit'>Shorten URL</button>
+      <button type="submit">Shorten</button>
+      {error && <div>{error}</div>}
     </form>
   );
-};
-
-Input.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
 };
 
 export default Input;
