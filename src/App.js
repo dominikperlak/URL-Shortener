@@ -1,23 +1,39 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Header from './components/Header';
-import Home from './components/Home';
-import Shorten from './components/Shorten';
-import Redirect from './components/Redirect';
-import './App.css';
+import React, { useState } from 'react';
+import Input from './components/Input';
+import { shortenUrl } from './components/tinyurlAPI';
 
-const App = () => {
+function App() {
+  const [inputValue, setInputValue] = useState('');
+  const [shortUrl, setShortUrl] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const url = await shortenUrl(inputValue);
+      setShortUrl(url);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <BrowserRouter>
-      <div className="App">
-        <Header />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/shorten" element={<Shorten />} />
-          <Route path="/:id" element={<Redirect />} />
-        </Routes>
-      </div>
-    </BrowserRouter>
+    <div className="App">
+      <h1>TinyURL Generator</h1>
+      <Input
+        handleSubmit={handleSubmit}
+        inputValue={inputValue}
+        setInputValue={setInputValue}
+      />
+      {shortUrl && (
+        <div>
+          <a href={shortUrl} target="_blank" rel="noreferrer">
+            {shortUrl}
+          </a>
+        </div>
+      )}
+    </div>
   );
-};
+}
 
 export default App;
