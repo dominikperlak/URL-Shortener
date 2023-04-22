@@ -3,7 +3,7 @@ export const shortenUrl = async (url, token) => {
     const response = await fetch(`https://api-ssl.bitly.com/v4/shorten`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${'def43db4550ae37838ca7036657f56e7a2a00e11'}`,
+        'Authorization': `Bearer ${'TOKEN'}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
