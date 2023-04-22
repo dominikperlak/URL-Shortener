@@ -1,62 +1,40 @@
-import { useState } from 'react';
-import { shortenUrl } from '../components/tinyurlapi';
+import React, { useState } from 'react';
+import { shortenUrl } from './tinyurlapi';
 
-const Input = ({ onUrlShorten, shortenedUrl }) => {
-  const [url, setUrl] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+const Input = () => {
+  const [inputValue, setInputValue] = useState('');
+  const [shortenedUrl, setShortenedUrl] = useState('');
   const [error, setError] = useState('');
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setIsLoading(true);
+  const handleClick = async () => {
     try {
-      const result = await shortenUrl(url);
-      onUrlShorten(result);
+      const shortUrl = await shortenUrl(inputValue);
+      setShortenedUrl(shortUrl);
       setError('');
     } catch (error) {
-      setError('Something went wrong, please try again.');
+      setError(error.message);
+      setShortenedUrl('');
     }
-    setIsLoading(false);
-  };
-
-  const handleChange = (event) => {
-    setUrl(event.target.value);
   };
 
   return (
     <div className="container">
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="url">Enter a URL to shorten:</label>
-        <div className="input-group mb-3">
-          <input
-            type="url"
-            className="form-control"
-            id="url"
-            aria-describedby="button-addon2"
-            placeholder="https://example.com"
-            value={url}
-            onChange={handleChange}
-            required
-          />
-          <button
-            className="btn btn-primary"
-            type="submit"
-            id="button-addon2"
-            disabled={isLoading || url === ''}
-          >
-            {isLoading ? 'Loading...' : 'Shorten'}
-          </button>
-        </div>
-        {error && <div className="alert alert-danger">{error}</div>}
+      <div className="form">
+        <input
+          type="text"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+        />
+        <button onClick={handleClick}>Shorten</button>
+      </div>
+      <div className="result">
         {shortenedUrl && (
-          <div className="alert alert-success">
-            Your shortened URL is:{' '}
-            <a href={shortenedUrl} target="_blank" rel="noreferrer">
-              {shortenedUrl}
-            </a>
-          </div>
+          <a href={shortenedUrl} target="_blank" rel="noopener noreferrer">
+            {shortenedUrl}
+          </a>
         )}
-      </form>
+        {error && <p>{error}</p>}
+      </div>
     </div>
   );
 };
