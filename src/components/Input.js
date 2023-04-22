@@ -1,29 +1,29 @@
 import React, { useState } from 'react';
 
-const Input = ({ handleSubmit }) => {
-  const [inputValue, setInputValue] = useState('');
-  const [error, setError] = useState('');
+const Input = ({ onShorten }) => {
+  const [url, setUrl] = useState('');
 
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     try {
-      await handleSubmit(inputValue);
-      setError('');
-    } catch (err) {
-      setError('Something went wrong, please try again.');
+      const shortenedUrl = await onShorten(url);
+      console.log('Shortened URL:', shortenedUrl);
+      setUrl('');
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
     }
   };
 
   return (
-    <form onSubmit={handleFormSubmit}>
+    <form onSubmit={handleSubmit}>
       <input
         type="text"
         placeholder="Enter URL"
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
+        value={url}
+        onChange={(event) => setUrl(event.target.value)}
       />
       <button type="submit">Shorten</button>
-      {error && <div>{error}</div>}
     </form>
   );
 };

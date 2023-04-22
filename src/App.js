@@ -1,26 +1,25 @@
 import React, { useState } from 'react';
 import Input from './components/Input';
 import { shortenUrl } from './components/tinyurlapi';
+import './App.css';
 
 function App() {
-  const [shortUrl, setShortUrl] = useState('');
+  const [shortenedUrl, setShortenedUrl] = useState('');
 
-  const handleSubmit = async (url) => {
-    const data = await shortenUrl(url);
-    setShortUrl(data.result.url);
+  const handleUrlShorten = async (url) => {
+    try {
+      const response = await shortenUrl(url);
+      setShortenedUrl(response);
+    } catch (error) {
+      console.error(error);
+      setShortenedUrl('Something went wrong, please try again.');
+    }
   };
 
   return (
-    <div className="App">
-      <h1>TinyURL Generator</h1>
-      <Input handleSubmit={handleSubmit} />
-      {shortUrl && (
-        <div>
-          <a href={shortUrl} target="_blank" rel="noreferrer">
-            {shortUrl}
-          </a>
-        </div>
-      )}
+    <div className="app">
+      <h1>URL Shortener</h1>
+      <Input onUrlShorten={handleUrlShorten} shortenedUrl={shortenedUrl} />
     </div>
   );
 }
