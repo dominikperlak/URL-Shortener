@@ -1,25 +1,32 @@
-import React, { useState } from 'react';
-import Input from './components/Input';
-import { shortenUrl } from './components/tinyurlapi';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
+import Input from "./components/Input";
+import { shortenUrl } from './components/bitlyurlapi';
 
 function App() {
-  const [shortenedUrl, setShortenedUrl] = useState('');
+  const [shortenedUrl, setShortenedUrl] = useState("");
 
-  const handleUrlShorten = async (url) => {
+  const handleShortenUrl = async (url) => {
     try {
-      const response = await shortenUrl(url);
-      setShortenedUrl(response);
+      const shortUrl = await shortenUrl(url);
+      setShortenedUrl(shortUrl);
     } catch (error) {
       console.error(error);
-      setShortenedUrl('Something went wrong, please try again.');
     }
   };
 
   return (
-    <div className="app">
+    <div className="App">
       <h1>URL Shortener</h1>
-      <Input onUrlShorten={handleUrlShorten} shortenedUrl={shortenedUrl} />
+      <Input onShorten={handleShortenUrl} />
+      {shortenedUrl && (
+        <p>
+          Shortened URL:{" "}
+          <a href={shortenedUrl} target="_blank" rel="noreferrer">
+            {shortenedUrl}
+          </a>
+        </p>
+      )}
     </div>
   );
 }

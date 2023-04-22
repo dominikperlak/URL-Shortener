@@ -1,41 +1,57 @@
 import React, { useState } from 'react';
-import { shortenUrl } from './tinyurlapi';
+import { Form, Button } from 'react-bootstrap';
+import { FaRegCopy } from 'react-icons/fa';
+import { shortenUrl } from './bitlyurlapi';
 
 const Input = () => {
-  const [inputValue, setInputValue] = useState('');
+  const [url, setUrl] = useState('');
   const [shortenedUrl, setShortenedUrl] = useState('');
-  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleClick = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
     try {
-      const shortUrl = await shortenUrl(inputValue);
-      setShortenedUrl(shortUrl);
-      setError('');
+      const link = await shortenUrl(url);
+      setShortenedUrl(link);
+      setIsLoading(false);
     } catch (error) {
-      setError(error.message);
-      setShortenedUrl('');
+      console.log(error);
+      setIsLoading(false);
     }
   };
 
+  const handleCopy = () => {
+    navigator.clipboard.writeText(shortenedUrl);
+  };
+
   return (
-    <div className="container">
-      <div className="form">
-        <input
-          type="text"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-        />
-        <button onClick={handleClick}>Shorten</button>
-      </div>
-      <div className="result">
-        {shortenedUrl && (
-          <a href={shortenedUrl} target="_blank" rel="noopener noreferrer">
+    <>
+      <Form onSubmit={handleSubmit} className='my-3'>
+        <Form.Group controlId='formUrl'>
+          <Form.Control
+            type='text'
+            placeholder='Enter URL'
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+          />
+        </Form.Group>
+        <Button variant='primary' type='submit' disabled={!url || isLoading}>
+          {isLoading ? 'Shortening...' : 'Shorten'}
+        </Button>
+      </Form>
+
+      {shortenedUrl && (
+        <div className='result-container'>
+          <a href={shortenedUrl} target='_blank' rel='noreferrer'>
             {shortenedUrl}
           </a>
-        )}
-        {error && <p>{error}</p>}
-      </div>
-    </div>
+          <Button variant='outline-secondary' onClick={handleCopy}>
+            <FaRegCopy />
+          </Button>
+        </div>
+      )}
+    </>
   );
 };
 
