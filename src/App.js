@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
 import Input from './components/Input';
-import { shortenUrl } from './components/bitlyurlapi';
+import { shortenUrl } from './components/api';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -10,11 +10,12 @@ function App() {
 
   const handleShortenUrl = async (url) => {
     try {
-      const shortUrl = await shortenUrl(url);
-      setShortenedUrl(shortUrl);
+      const data = await shortenUrl(url);
+      setShortenedUrl(data.result.full_short_link);
+      toast.success('The URL has been successfully shortened.');
     } catch (error) {
       console.error(error);
-      toast.error('There was an error shortening the URL');
+      toast.error(error.message);
     }
   };
 

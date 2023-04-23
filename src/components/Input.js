@@ -1,81 +1,64 @@
 import React, { useState } from 'react';
-import { Form, Button, Input as AntInput, Row, Col } from 'antd';
-import { FaRegCopy } from 'react-icons/fa';
-import { shortenUrl } from './bitlyurlapi';
-import '../antd.css';
+import { Input as AntInput, Button } from 'antd';
+import { LinkOutlined } from '@ant-design/icons';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { toast } from 'react-toastify';
+import '../App.css';
+import { shortenUrl } from './api';
 
-const { Search } = AntInput;
 
 const Input = ({ onShorten }) => {
   const [url, setUrl] = useState('');
   const [shortenedUrl, setShortenedUrl] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = async (e) => {
-    if (e && e.preventDefault) {
-      e.preventDefault(); // dodajemy sprawdzenie, czy e istnieje i posiada metodę preventDefault
-    }
-    if (!url) {
-      toast.error('There is no command written here!');
-      return;
-    }
-    setIsLoading(true);
-    try {
-      const res = await shortenUrl(url);
-      const shortUrl = res;
-      setShortenedUrl(shortUrl);
-      onShorten(shortUrl); // przekazanie skróconego URL do App.js
-      setIsLoading(false);
-    } catch (error) {
-      console.log(error);
-      setIsLoading(false);
-      toast.error('There was an error shortening the URL');
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (url === '') {
+      setError('Please enter a link to shorten.');
+    } else {
+      try {
+        const response = await shortenUrl(url);
+        setShortenedUrl(response.result.short_link);
+        onShorten(response.result.short_link);
+        setUrl('');
+        setError('');
+      } catch (error) {
+        toast.error(error.message);
+      }
     }
   };
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(shortenedUrl);
-    toast.success('Copied to clipboard');
+  const handleChange = (event) => {
+    setUrl(event.target.value);
+    setError('');
   };
 
   return (
-    <>
-      <Form onSubmit={handleSubmit} className='my-3'>
-        <Row gutter={[16, 16]}>
-          <Col xs={24} sm={18}>
-            <Search
-              placeholder='Enter URL'
-              enterButton='Shorten'
-              size='large'
-              onSearch={handleSubmit}
-              loading={isLoading}
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-            />
-          </Col>
-          <Col xs={24} sm={6}>
-            <Button block type='primary' size='large' disabled={!shortenedUrl}>
-              <a href={shortenedUrl} target='_blank' rel='noreferrer'>
-                {shortenedUrl && 'Go to shortened URL'}
-              </a>
-            </Button>
-          </Col>
-        </Row>
-      </Form>
-
+    <form onSubmit={handleSubmit} className='input-form'>
+      <AntInput
+        type='text'
+        placeholder='Shorten a link here...'
+        value={url}
+        onChange={handleChange}
+        size='large'
+        className='input-field'
+        prefix={<LinkOutlined />}
+      />
+      {error && <p className='error-message'>{error}</p>}
+      <Button type='primary' size='large' htmlType='submit'>
+        Shorten It!
+      </Button>
       {shortenedUrl && (
-        <div className='result-container'>
+        <p>
+          Shortened URL:{' '}
           <a href={shortenedUrl} target='_blank' rel='noreferrer'>
             {shortenedUrl}
           </a>
-          <Button variant='outline-secondary' onClick={handleCopy}>
-            <FaRegCopy />
-          </Button>
-        </div>
+        </p>
       )}
-    </>
+      <ToastContainer />
+    </form>
   );
 };
 
