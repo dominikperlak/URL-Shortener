@@ -1,94 +1,99 @@
 body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
+  background-color: #f5f5f5;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
 }
 
 .container {
-  max-width: 800px;
+  width: 90%;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 40px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  height: 100%;
 }
 
 .title {
-  font-size: 2rem;
+  font-size: 32px;
   font-weight: bold;
-  margin-bottom: 2rem;
-}
-
-.form-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  margin-bottom: 40px;
+  text-align: center;
 }
 
 .input-container {
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-.input-container label {
-  margin-right: 1rem;
-}
-
-.input-field {
-  width: 100%;
-  padding: 0.5rem;
-  border-radius: 0.25rem;
-  border: 1px solid #ccc;
-  font-size: 1rem;
-}
-
-.submit-button {
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 0.25rem;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-.error-message {
-  color: #dc3545;
-  font-size: 0.875rem;
-  margin-top: 0.5rem;
-}
-
-.short-url-container {
-  margin-top: 2rem;
-  display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-}
-
-.short-url-container label {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-.short-url-field {
   width: 100%;
-  padding: 0.5rem;
-  border-radius: 0.25rem;
-  border: 1px solid #ccc;
-  font-size: 1.25rem;
-  text-align: center;
+  max-width: 600px;
+  margin-bottom: 40px;
 }
 
-.copy-button {
-  margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 0.25rem;
-  font-size: 1rem;
-  cursor: pointer;
+.ant-input {
+  width: 100%;
+  max-width: 600px;
+  margin-right: 10px;
 }
+
+.ant-btn {
+  width: 160px;
+  height: 48px;
+  border-radius: 24px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  font-size: 18px;
+  line-height: 24px;
+  margin-top: 10px;
+}
+
+.ant-typography {
+  text-align: center;
+  margin-top: 20px;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.toastify {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 20px 0;
+  }
+  .title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  .input-container {
+    margin-bottom: 20px;
+  }
+  .ant-input {
+    max-width: 100%;
+    margin-right: 0;
+  }
+  .ant-btn {
+    width: 100%;
+    height: 44px;
+    border-radius: 22px;
+    margin-top: 10px;
+    letter-spacing: 1px;
+    font-size: 18px;
+    line-height: 24px;
+  }
+}
+
