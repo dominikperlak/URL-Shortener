@@ -1,65 +1,66 @@
 import React, { useState } from 'react';
-import { Input as AntInput, Button } from 'antd';
-import { LinkOutlined } from '@ant-design/icons';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import '../App.css';
-import { shortenUrl } from './api';
+import { Input, Button, Typography } from 'antd';
+import { CopyOutlined } from '@ant-design/icons';
+import { toast } from 'react-toastify';
 
+const { Text } = Typography;
 
-const Input = ({ onShorten }) => {
-  const [url, setUrl] = useState('');
-  const [shortenedUrl, setShortenedUrl] = useState('');
-  const [error, setError] = useState('');
+const InputComponent = ({ onShorten }) => {
+  const [urlInput, setUrlInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [shortLink, setShortLink] = useState('');
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    if (url === '') {
-      setError('Please enter a link to shorten.');
-    } else {
-      try {
-        const response = await shortenUrl(url);
-        setShortenedUrl(response.result.short_link);
-        onShorten(response.result.short_link);
-        setUrl('');
-        setError('');
-      } catch (error) {
-        toast.error(error.message);
-      }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (urlInput === '') {
+      toast.error('You need to write a command!');
+      return;
+    }
+    setIsLoading(true);
+    try {
+      const response = await fetch(`https://api.shrtco.de/v2/shorten?url=${urlInput}`);
+      const data = await response.json();
+      setShortLink(data.result.full_short_link);
+      onShorten(data.result.full_short_link);
+      setUrlInput('');
+    } catch (error) {
+      console.error(error);
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleChange = (event) => {
-    setUrl(event.target.value);
-    setError('');
-  };
-
   return (
-    <form onSubmit={handleSubmit} className='input-form'>
-      <AntInput
-        type='text'
-        placeholder='Shorten a link here...'
-        value={url}
-        onChange={handleChange}
-        size='large'
-        className='input-field'
-        prefix={<LinkOutlined />}
+    <form onSubmit={handleSubmit}>
+      <Input
+        placeholder="Shorten a link here..."
+        value={urlInput}
+        onChange={(e) => setUrlInput(e.target.value)}
+        disabled={isLoading}
+        size="large"
+        style={{ marginRight: '10px' }}
       />
-      {error && <p className='error-message'>{error}</p>}
-      <Button type='primary' size='large' htmlType='submit'>
-        Shorten It!
+      <Button
+        type="primary"
+        htmlType="submit"
+        disabled={isLoading}
+        icon={<CopyOutlined />}
+        size="large"
+      >
+        {isLoading ? 'Loading...' : 'Shorten It!'}
       </Button>
-      {shortenedUrl && (
-        <p>
-          Shortened URL:{' '}
-          <a href={shortenedUrl} target='_blank' rel='noreferrer'>
-            {shortenedUrl}
+      {shortLink && (
+        <div style={{ marginTop: '15px' }}>
+          <Text strong>Shortened Link:</Text>
+          <br />
+          <a href={shortLink} target="_blank" rel="noreferrer">
+            {shortLink}
           </a>
-        </p>
+        </div>
       )}
-      <ToastContainer />
     </form>
   );
 };
 
-export default Input;
+export default InputComponent;
